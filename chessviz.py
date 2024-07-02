@@ -84,7 +84,7 @@ def board(game, SCALE=40):
         n = len(colors)
         ans = ""
         a = 0
-        for (cnt, color) in compress(colors):
+        for cnt, color in compress(colors):
             if cnt == n:
                 ans += circle(x, y, r, color)
                 continue
@@ -106,7 +106,7 @@ def board(game, SCALE=40):
             elements.append(rect(2 * i, 2 * (7 - j), 2, 2, board_color(i, j)))
 
     for moves, color in ((black_moves, black), (white_moves, white)):
-        for (x1, y1, x2, y2) in moves:
+        for x1, y1, x2, y2 in moves:
             dx = abs(x2 - x1)
             dy = abs(y2 - y1)
             norm = (dx * dx + dy * dy) ** 0.5 / 0.05
@@ -155,19 +155,19 @@ def board(game, SCALE=40):
 
 
 def get_game(gid):
-    return io.StringIO(
-        requests.get(
-            "https://www.chessgames.com/perl/nph-chesspgn",
-            params={"text": "1", "gid": gid},
-            headers={
-                "User-Agent": "Mozilla",
-            },
-        ).text
+    r = requests.get(
+        "https://www.chessgames.com/perl/nph-chesspgn",
+        params={"text": "1", "gid": gid},
+        headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
+        },
     )
+    assert r.status_code == 200
+    return r.text
 
 
 def main(gid):
-    return board(chess.pgn.read_game(get_game(gid)))
+    return board(chess.pgn.read_game(io.StringIO(get_game(gid))))
 
 
 if __name__ == "__main__":
