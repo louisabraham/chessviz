@@ -139,9 +139,7 @@ def board(game, SCALE=40):
         if last_player(color) is None:
             continue
         elements.append(
-            circle_contour(
-                2 * x + 1, 2 * (7 - y) + 1, 0.4, pie_color[last_player(color)], 0.2
-            )
+            circle(2 * x + 1, 2 * (7 - y) + 1, 0.5, pie_color[last_player(color)])
         )
         elements.append(
             pie_chart(
