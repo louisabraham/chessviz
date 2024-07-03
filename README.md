@@ -39,6 +39,7 @@ A demo is hosted on https://chess.smtd.me/. For example, to visualize [this game
 
 ## TODO
 
-- Run the python code in-browser using [Pyodide](https://pyodide.org/en/stable/index.html). Until [this PR](https://github.com/pyodide/pyodide/pull/1956) is merged, [this code](https://github.com/pyodide/pyodide/pull/1956#issuecomment-1003649211) can be used for the scraping.
 
-- Make a proper `setup.py` with the webserver as an option.
+- README
+- Add docs 
+- blogpost

@@ -82,12 +82,14 @@ def board(game, SCALE=40):
 
     def pie_chart(x, y, r, colors):
         n = len(colors)
+        colors = compress(colors)
+        if len(colors) == 1:
+            return circle(x, y, r, colors[0][1])
+        if colors[0][1] == colors[-1][1]:
+            colors[-1][0] += 1
         ans = ""
         a = 0
-        for cnt, color in compress(colors):
-            if cnt == n:
-                ans += circle(x, y, r, color)
-                continue
+        for cnt, color in colors:
             b = a + 2 * pi * cnt / n
             ans += (
                 f'<path fill="{color}" d="M {SCALE*(x+r*sin(a))} {SCALE*(y-r*cos(a))} '

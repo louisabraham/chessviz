@@ -14,17 +14,6 @@
             padding: 20px;
         }
 
-        .svg-container {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
-
-        .svg-container svg {
-            display: block;
-            margin: auto;
-        }
-
         form {
             display: flex;
             flex-direction: column;
@@ -48,23 +37,22 @@
             font-size: 1em;
         }
 
-
         button {
             cursor: pointer;
+        }
+
+        img {
+            height: auto;
+            width: auto;
+            max-width: 450px;
+            max-height: 450px;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="svg-container">
-        <svg width="100%" height="200" xmlns="http://www.w3.org/2000/svg">
-            <rect width="100%" height="100%" fill="#f3f3f3" />
-            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="24" fill="#333">
-                Inline SVG Placeholder
-            </text>
-        </svg>
-    </div>
+    <canvas id="canvas" style="display:none"></canvas>
+    <img id="img">
 
     <form id="chessForm">
         <label for="gid"><a href="https://chessgames.com">chessgames.com</a> url or gid</label>
@@ -80,7 +68,8 @@
 
 </body>
 <script type="module">
-    import { Chess } from './chess.js'
+    import { Canvg } from 'https://esm.run/canvg';
+    import { Chess } from 'https://esm.run/chess.js';
 
     const compute = (pgn) => {
         let chess = new Chess();
@@ -146,7 +135,7 @@
         console.log(black_moves);
 
 
-        let SCALE = 30;
+        let SCALE = 200;
         let board_white = "rgb(240,230,200)"
         let board_black = "rgb(30,30,30)"
         let white = "rgb(220, 130, 50)"
@@ -190,13 +179,16 @@
 
         const pieChart = (x, y, r, colors) => {
             const n = colors.length;
+            colors = compress(colors)
+            if (colors.length === 1) {
+                return circle(x, y, r, colors[0][1]);
+            }
+            if (colors[0][1] == colors.slice(-1)[0][1]) {
+                colors.slice(-1)[0][0] += 1
+            }
             let ans = "";
             let a = 0;
-            for (let [cnt, color] of compress(colors)) {
-                if (cnt === n) {
-                    ans += circle(x, y, r, color);
-                    continue;
-                }
+            for (let [cnt, color] of colors) {
                 const b = a + 2 * Math.PI * cnt / n;
                 ans += `<path fill="${color}" d="M ${SCALE * (x + r * Math.sin(a))} ${SCALE * (y - r * Math.cos(a))} A ${SCALE * r} ${SCALE * r} 0 ${(b - a > Math.PI) ? 1 : 0} 1 ${SCALE * (x + r * Math.sin(b))} ${SCALE * (y - r * Math.cos(b))} L ${SCALE * x} ${SCALE * y}"/>`;
                 a = b;
@@ -251,7 +243,21 @@
         }
 
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${16 * SCALE}" height="${16 * SCALE}">${elements.join('')}</svg>`;
-        document.querySelector('.svg-container').innerHTML = svg;
+
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        const v = Canvg.fromString(ctx, svg);
+
+        v.start();
+
+        const img_url = canvas.toDataURL('image/png', 1);
+        const img = document.getElementById('img');
+        img.src = img_url;
+
+        // canvas.width = 500;
+        // canvas.height = 500;
+
+        // document.querySelector('.svg-container').innerHTML = svg;
     }
     const getGame = async (gid) => {
         pgn.value = '';
@@ -318,6 +324,8 @@
         getGame(gid);
         window.location.hash = gid;
     });
+
+
 </script>
 
 </html>
