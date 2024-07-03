@@ -189,9 +189,9 @@
             let ans = "";
             let a = 0;
             for (let [cnt, color] of colors) {
-                const b = a + 2 * Math.PI * cnt / n;
+                const b = a + 2 * Math.PI * (cnt + .1) / n;
                 ans += `<path fill="${color}" d="M ${SCALE * (x + r * Math.sin(a))} ${SCALE * (y - r * Math.cos(a))} A ${SCALE * r} ${SCALE * r} 0 ${(b - a > Math.PI) ? 1 : 0} 1 ${SCALE * (x + r * Math.sin(b))} ${SCALE * (y - r * Math.cos(b))} L ${SCALE * x} ${SCALE * y}"/>`;
-                a = b;
+                a += + 2 * Math.PI * cnt / n;
             }
             return ans;
         };

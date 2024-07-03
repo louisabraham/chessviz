@@ -90,13 +90,13 @@ def board(game, SCALE=40):
         ans = ""
         a = 0
         for cnt, color in colors:
-            b = a + 2 * pi * cnt / n
+            b = a + 2 * pi * (cnt + 0.1) / n
             ans += (
                 f'<path fill="{color}" d="M {SCALE*(x+r*sin(a))} {SCALE*(y-r*cos(a))} '
                 f"A {SCALE*r} {SCALE*r} 0 {b - a > pi:d} 1 {SCALE*(x+r*sin(b))} {SCALE*(y-r*cos(b))} "
                 f'L {SCALE*x} {SCALE*y}"/>'
             )
-            a = b
+            a += 2 * pi * cnt / n
         return ans
 
     def board_color(i, j):
