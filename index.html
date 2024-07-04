@@ -110,6 +110,25 @@
             background-color: #e6b800;
         }
 
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1em;
+            border: 1px solid #666;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        form select option {
+            background-color: #333;
+            color: #fff;
+        }
+
         main {
             max-width: 550px;
             width: 100%;
@@ -183,9 +202,28 @@
     </header>
 
     <div id="visualization">
-        <img id="img" src="./1044366.png" alt="Chess Board">
+        <img id="img" src="./empty.png" alt="Chess Board">
+        <img id="preload" src="./1044366.png" style="display:none">
     </div>
 
+    <form>
+        <label for="famousGames">Select a famous game</label>
+
+        <select id="famousGames" name="famousGames"
+            onchange="document.getElementById('gid').value = this.value; window.getGame(this.value);">
+            <option value="" disabled selected>Select a famous game</option>
+            <option value="1018910">The Immortal Game: Anderssen vs. Kieseritzky, 1851</option>
+            <option value="1018961">The Evergreen Game: Anderssen vs. Dufresne, 1852</option>
+            <option value="1011478">Kasparov vs. Topalov, 1999: Kasparov's Immortal</option>
+            <option value="1233404">The Opera Game: Morphy vs. Duke Karl/Count Isouard, 1858</option>
+            <option value="1008361">Byrne vs. Fischer, 1956: The Game of the Century</option>
+            <option value="1070917">Deep Blue vs. Kasparov, 1997: The Historic Rematch</option>
+            <option value="1067175">Karpov vs. Kasparov, 1985: World Championship Game 16</option>
+            <option value="1044366">Fischer vs. Spassky, 1972: World Championship Game 6</option>
+            <option value="1032537">Tal vs. Botvinnik, 1960: World Championship Game 6</option>
+            <option value="1704763">Anand vs. Aronian, 2013: Wijk aan Zee</option>
+        </select>
+    </form>
     <form id="chessForm">
         <label for="gid"><a href="https://chessgames.com" style="color: #ffcc00;">chessgames.com</a> URL or GID</label>
         <input type="text" id="gid" name="gid" placeholder="Enter GID">
@@ -221,6 +259,41 @@
     </footer>
 
 </body>
+<script>
+    const famousGames = document.getElementById('famousGames');
+    const gidForm = document.getElementById('gid');
+    const pgn = document.getElementById('pgn');
+
+    const url = window.location.href;
+    const gid = url.split('#')[1];
+    if (!gid) {
+        famousGames.value = '1044366';
+        gidForm.value = '1044366';
+        pgn.value = `[Event "Spassky - Fischer World Championship Match"]
+[Site "Reykjavik ISL"]
+[Date "1972.07.23"]
+[EventDate "?"]
+[Round "6"]
+[Result "1-0"]
+[White "Robert James Fischer"]
+[Black "Boris Spassky"]
+[ECO "D59"]
+[WhiteElo "?"]
+[BlackElo "?"]
+[PlyCount "81"]
+
+1. c4 e6 2. Nf3 d5 3. d4 Nf6 4. Nc3 Be7 5. Bg5 O-O 6. e3 h6
+7. Bh4 b6 8. cxd5 Nxd5 9. Bxe7 Qxe7 10. Nxd5 exd5 11. Rc1 Be6
+12. Qa4 c5 13. Qa3 Rc8 14. Bb5 a6 15. dxc5 bxc5 16. O-O Ra7
+17. Be2 Nd7 18. Nd4 Qf8 19. Nxe6 fxe6 20. e4 d4 21. f4 Qe7
+22. e5 Rb8 23. Bc4 Kh8 24. Qh3 Nf8 25. b3 a5 26. f5 exf5
+27. Rxf5 Nh7 28. Rcf1 Qd8 29. Qg3 Re7 30. h4 Rbb7 31. e6 Rbc7
+32. Qe5 Qe8 33. a4 Qd8 34. R1f2 Qe8 35. R2f3 Qd8 36. Bd3 Qe8
+37. Qe4 Nf6 38. Rxf6 gxf6 39. Rxf6 Kg8 40. Bc4 Kh8 41. Qf4 1-0
+`;
+        img.src = "./1044366.png"
+    }
+</script>
 <script type="module">
     import { Canvg } from 'https://esm.run/canvg';
     import { Chess } from 'https://esm.run/chess.js';
@@ -421,51 +494,24 @@
             .then(data => {
                 pgn.value = data;
                 compute(pgn.value);
+                window.location.hash = gid;
             });
     };
-    const gidForm = document.getElementById('gid');
-    const pgn = document.getElementById('pgn');
-
-    const url = window.location.href;
-    const gid = url.split('#')[1];
-    console.log(gid)
+    window.getGame = getGame;
     if (gid) {
+        famousGames.value = gid;
         gidForm.value = gid;
         getGame(gid)
     }
-    else {
-        gidForm.value = '1044366';
-        pgn.value = `[Event "Spassky - Fischer World Championship Match"]
-[Site "Reykjavik ISL"]
-[Date "1972.07.23"]
-[EventDate "?"]
-[Round "6"]
-[Result "1-0"]
-[White "Robert James Fischer"]
-[Black "Boris Spassky"]
-[ECO "D59"]
-[WhiteElo "?"]
-[BlackElo "?"]
-[PlyCount "81"]
-
-1. c4 e6 2. Nf3 d5 3. d4 Nf6 4. Nc3 Be7 5. Bg5 O-O 6. e3 h6
-7. Bh4 b6 8. cxd5 Nxd5 9. Bxe7 Qxe7 10. Nxd5 exd5 11. Rc1 Be6
-12. Qa4 c5 13. Qa3 Rc8 14. Bb5 a6 15. dxc5 bxc5 16. O-O Ra7
-17. Be2 Nd7 18. Nd4 Qf8 19. Nxe6 fxe6 20. e4 d4 21. f4 Qe7
-22. e5 Rb8 23. Bc4 Kh8 24. Qh3 Nf8 25. b3 a5 26. f5 exf5
-27. Rxf5 Nh7 28. Rcf1 Qd8 29. Qg3 Re7 30. h4 Rbb7 31. e6 Rbc7
-32. Qe5 Qe8 33. a4 Qd8 34. R1f2 Qe8 35. R2f3 Qd8 36. Bd3 Qe8
-37. Qe4 Nf6 38. Rxf6 gxf6 39. Rxf6 Kg8 40. Bc4 Kh8 41. Qf4 1-0
-`;
-        compute(pgn.value);
-    }
-
     document.getElementById('pgnForm').addEventListener('submit', (e) => {
         e.preventDefault();
+        famousGames.value = '';
+        gidForm.value = '';
         compute(pgn.value);
     });
     document.getElementById('chessForm').addEventListener('submit', (e) => {
         e.preventDefault();
+        famousGames.value = '';
         let gid = document.getElementById('gid').value;
         if (gid.includes('chessgames.com')) {
             gid = gid.split('gid=').pop();
