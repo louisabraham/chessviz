@@ -8,7 +8,7 @@ This project is an attempt to produce nice pictures out of chess games.
 
 ## Python version
 
-**Installation **
+**Installation**
 
 ```sh
 pip install -r requirements
