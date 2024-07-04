@@ -39,14 +39,27 @@
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
+            width: 100%;
+            /* Changed to 100% to be responsive */
+            max-width: 500px;
+            /* Maintain max width for larger screens */
+            height: auto;
+            /* Changed to auto to adapt height */
+            background-color: #2c2c2c;
+            /* Placeholder background color */
+            border-radius: 8px;
+            justify-content: center;
+            aspect-ratio: 1;
+            /* Maintain square aspect ratio */
         }
 
         #visualization img {
-            width: 500px;
-            height: 500px;
-            margin-bottom: 20px;
+            max-width: 100%;
+            /* Changed to 100% to be responsive */
+            max-height: 100%;
+            /* Changed to 100% to be responsive */
             border-radius: 8px;
-            border: 1px solid #666;
+            border: 1px solid #333;
         }
 
         form {
@@ -134,6 +147,15 @@
             text-decoration: underline;
         }
 
+        .disclaimer {
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+            margin-top: 10px;
+            max-width: 550px;
+        }
+
+
         @media (max-width: 600px) {
             header h1 {
                 font-size: 2em;
@@ -154,8 +176,7 @@
     <header>
         <h1>ChessViz</h1>
         <p>
-            Visualize historical chess games.
-            Enter a game ID or paste PGN notation to see the magic happen!
+            Visualize historical chess games. Enter a game ID or paste PGN notation to see the magic happen!
         </p>
     </header>
 
@@ -189,10 +210,14 @@
 
     <footer>
         <p>Created by <a href="https://louisabraham.github.io/">Louis Abraham</a>. View the source code on <a
-                href="#">GitHub</a>.</p>
+                href="https://github.com/louisabraham/chessviz">GitHub</a>.
+        </p>
+        <div class="disclaimer">
+            <p>All images are provided for educational and non-commercial use only. Unauthorized commercial use,
+                distribution, or reproduction is prohibited.</p>
+        </div>
     </footer>
 
-    <canvas id="canvas" style="display:none"></canvas>
 </body>
 <script type="module">
     import { Canvg } from 'https://esm.run/canvg';
