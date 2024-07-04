@@ -6,20 +6,15 @@ This project is an attempt to produce nice pictures out of chess games.
 
 **Visualization of [Fischer vs Spassky game 6](https://www.chessgames.com/perl/chessgame?gid=1044366)**
 
-## Features
+## Python version
 
-- PGN scraping from https://www.chessgames.com/
-- svg output
-- web API
-
-
-## Installation 
+**Installation **
 
 ```sh
 pip install -r requirements
 ```
 
-## Usage
+**Usage**
 
 ```sh
 python chessviz.py gid > board.svg
@@ -27,19 +22,6 @@ python chessviz.py gid > board.svg
 
 where `gid` is a game id from [chessgames](https://www.chessgames.com/).
 
-## API
+## Browser version
 
-```sh
-python api.py
-```
-
-`launch.sh` gives a more stable way to launch the API using [Gunicorn](https://gunicorn.org/).
-
-A demo is hosted on https://chess.smtd.me/. For example, to visualize [this game](https://www.chessgames.com/perl/chessgame?gid=1044366) you can go to https://chess.smtd.me/1044366.
-
-## TODO
-
-
-- README
-- Add docs 
-- blogpost
+The code was also ported to Javascript and runs at <https://louisabraham.github.io/chessviz/>. See in `index.html`.
