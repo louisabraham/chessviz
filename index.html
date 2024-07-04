@@ -7,11 +7,46 @@
     <title>ChessViz</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            margin: 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            color: #ffcc00;
+        }
+
+        header p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #visualization {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #visualization img {
+            width: 500px;
+            height: 500px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #666;
         }
 
         form {
@@ -21,51 +56,143 @@
             width: 100%;
             max-width: 550px;
             margin-bottom: 20px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        form label {
+            color: #ffcc00;
+            margin-bottom: 5px;
         }
 
         form input,
         form textarea {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 10px 0;
             font-size: 1em;
+            border: 1px solid #666;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
         }
 
         form button {
-            padding: 5px 10px;
-            margin: 5px 0;
+            padding: 10px 20px;
+            margin: 10px 0;
             font-size: 1em;
-        }
-
-        button {
+            background-color: #ffcc00;
+            color: #333;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        img {
-            height: auto;
-            width: auto;
-            max-width: 450px;
-            max-height: 450px;
+        form button:hover {
+            background-color: #e6b800;
+        }
+
+        main {
+            max-width: 550px;
+            width: 100%;
+            text-align: left;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        main h2 {
+            font-size: 1.8em;
+            margin-bottom: 0.5em;
+            color: #ffcc00;
+        }
+
+        main p,
+        main ul {
+            font-size: 1em;
+            margin-bottom: 1em;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            main h2 {
+                font-size: 1.5em;
+            }
+
+            form {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <canvas id="canvas" style="display:none"></canvas>
-    <img id="img">
+    <header>
+        <h1>ChessViz</h1>
+        <p>
+            Visualize historical chess games.
+            Enter a game ID or paste PGN notation to see the magic happen!
+        </p>
+    </header>
+
+    <div id="visualization">
+        <img id="img" src="/mnt/data/image.png" alt="Chess Board">
+    </div>
 
     <form id="chessForm">
-        <label for="gid"><a href="https://chessgames.com">chessgames.com</a> url or gid</label>
+        <label for="gid"><a href="https://chessgames.com" style="color: #ffcc00;">chessgames.com</a> URL or GID</label>
         <input type="text" id="gid" name="gid" placeholder="Enter GID">
         <button type="submit">Enter</button>
     </form>
 
     <form id="pgnForm">
-        <label for="pgn">PGN notation</label>
+        <label for="pgn">PGN Notation</label>
         <textarea id="pgn" name="pgn" rows="10" placeholder="Enter PGN notation"></textarea>
         <button type="submit">Enter</button>
     </form>
 
+    <main>
+        <h2>Understanding the Visualization</h2>
+        <p>This visualization helps you to see the entire chess game in a single view:</p>
+        <ul>
+            <li>Each square contains a clock-like icon indicating which player occupied it over the course of the game.
+            </li>
+            <li>The color of the edge of each square's clock shows which player last occupied that square.</li>
+            <li>Lines connecting the squares represent all the moves made throughout the game, allowing you to trace the
+                sequence of play.</li>
+        </ul>
+    </main>
+
+    <footer>
+        <p>Created by <a href="https://louisabraham.github.io/">Louis Abraham</a>. View the source code on <a
+                href="#">GitHub</a>.</p>
+    </footer>
+
+    <canvas id="canvas" style="display:none"></canvas>
 </body>
 <script type="module">
     import { Canvg } from 'https://esm.run/canvg';
@@ -244,7 +371,7 @@
 
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${16 * SCALE}" height="${16 * SCALE}">${elements.join('')}</svg>`;
 
-        const canvas = document.querySelector('canvas');
+        const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const v = Canvg.fromString(ctx, svg);
 
@@ -254,10 +381,6 @@
         const img = document.getElementById('img');
         img.src = img_url;
 
-        // canvas.width = 500;
-        // canvas.height = 500;
-
-        // document.querySelector('.svg-container').innerHTML = svg;
     }
     const getGame = async (gid) => {
         pgn.value = '';
