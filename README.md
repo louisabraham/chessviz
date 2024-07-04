@@ -2,7 +2,7 @@
 
 This project is an attempt to produce nice pictures out of chess games.
 
-![Fischer vs Spassky game 6](1044366.svg)
+![Fischer vs Spassky game 6](1044366.png)
 
 **Visualization of [Fischer vs Spassky game 6](https://www.chessgames.com/perl/chessgame?gid=1044366)**
 
