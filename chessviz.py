@@ -109,8 +109,11 @@ def board(game, SCALE=40):
 
     for moves, color in ((black_moves, black), (white_moves, white)):
         for x1, y1, x2, y2 in moves:
-            dx = abs(x2 - x1)
-            dy = abs(y2 - y1)
+            if x2 < x1 or (x2 == x1 and y2 < y1):
+                x1, x2 = x2, x1
+                y1, y2 = y2, y1
+            dx = x2 - x1
+            dy = y2 - y1
             norm = (dx * dx + dy * dy) ** 0.5 / 0.05
             dx, dy = dy / norm, -dx / norm
             if color == black:
@@ -119,9 +122,9 @@ def board(game, SCALE=40):
             elements.append(
                 line(
                     2 * x1 + 1 + dx,
-                    2 * (7 - y1) + 1 + dy,
+                    2 * (7 - y1) + 1 - dy,
                     2 * x2 + 1 + dx,
-                    2 * (7 - y2) + 1 + dy,
+                    2 * (7 - y2) + 1 - dy,
                     color,
                     width=0.1,
                 )
